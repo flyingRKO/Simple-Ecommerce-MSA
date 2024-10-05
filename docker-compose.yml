@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  mysql-service:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+    ports:
+      - "3306:3306"
+    networks:
+      - ecommerce-network
+
+  member-service:
+    image: member-service
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql-service
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge
