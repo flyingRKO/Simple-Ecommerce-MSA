@@ -27,7 +27,7 @@ public class PaymentController {
                 request.paymentMethodId()));
     }
 
-    @GetMapping("/pament/users/{userId}/first-method")
+    @GetMapping("/payment/users/{userId}/first-method")
     public Response<PaymentMethodDto> getPaymentMethod(@PathVariable Long userId) {
         return Response.success(paymentService.getPaymentMethodByUser(userId));
     }

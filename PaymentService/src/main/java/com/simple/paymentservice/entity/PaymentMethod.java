@@ -3,8 +3,10 @@ package com.simple.paymentservice.entity;
 import com.simple.paymentservice.enums.PaymentMethodType;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 @Entity
 @Table(indexes = {@Index(name = "idx_userId", columnList = "userId")})
 public class PaymentMethod {
