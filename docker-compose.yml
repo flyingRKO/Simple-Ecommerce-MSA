@@ -1,24 +1,32 @@
 version: "3.8"
 
 services:
-  mysql-service:
+  mysql-server:
     image: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=1234
     ports:
       - "3306:3306"
-    networks:
-      - ecommerce-network
 
-  member-service:
-    image: member-service
+  myredis:
+    image: redis
     ports:
-      - "8081:8080"
-    depends_on:
-      - mysql-service
-    networks:
-      - ecommerce-network
+      - "6379:6379"
 
-networks:
-  ecommerce-network:
-    driver: bridge
+  cassandra-node-0:
+    image: cassandra
+    environment:
+      - CASSANDRA_SEEDS=cassandra-node-0
+      - CASSANDRA_CLUSTER_NAME=MyCluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_DC=dc1
+    ports:
+      - "7010:7000"   # 노드간 클러스터 내부 통신
+      - "7001:7001"   # 노드간 보안 통신에 사용
+      - "9042:9042"   # CQL 클라이언트와 통신
+    healthcheck:
+      test: ["CMD-SHELL", "[ $$(nodetool statusgossip) = running ]"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
